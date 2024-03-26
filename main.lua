@@ -1,38 +1,27 @@
+-- Define the color HEX values, names and accelerators.
 COLORS = {
-	0x000000, -- 0
-	0x008000, -- 1
-	0x00c0ff, -- 2
-	0x00ff00, -- 3
-	0x3333cc, -- 4
-	0x808080, -- 5
-	0xff0000, -- 6
-	0xff00ff, -- 7
-	0xff8000, -- 8
-	0xffff00, -- 9
-	0xffffff, -- 10
+	{ hex = 0x000000,  name = "black",        accel = "KP_0" },
+	{ hex = 0x008000,  name = "green",        accel = "KP_1" },
+	{ hex = 0x00c0ff,  name = "light blue",   accel = "KP_2" },
+	{ hex = 0x00ff00,  name = "light green",  accel = "KP_3" },
+	{ hex = 0x3333cc,  name = "blue",         accel = "KP_4" },
+	{ hex = 0x808080,  name = "gray",         accel = "KP_5" },
+	{ hex = 0xff0000,  name = "red",          accel = "KP_6" },
+	{ hex = 0xff00ff,  name = "magenta",      accel = "KP_7" },
+	{ hex = 0xff8000,  name = "orange",       accel = "KP_8" },
+	{ hex = 0xffff00,  name = "yellow",       accel = "KP_9" },
+	{ hex = 0xffffff,  name = "white",        accel = "KP_Add" }
 }
 
--- Register all Toolbar actions and intialize all UI stuff
+-- Populate the Plugin menu with an entry for each color, bound to the accelerator.
+-- It is not obvious from the documentation, but on can pass parameters to the callback using the "mode" key.
 function initUi()
-	app.registerUi({ ["menu"] = "Color 0", ["callback"] = "switchColor0", ["accelerator"] = "KP_0" })
-	app.registerUi({ ["menu"] = "Color 1", ["callback"] = "switchColor1", ["accelerator"] = "KP_1" })
-	app.registerUi({ ["menu"] = "Color 2", ["callback"] = "switchColor2", ["accelerator"] = "KP_2" })
-	app.registerUi({ ["menu"] = "Color 3", ["callback"] = "switchColor3", ["accelerator"] = "KP_3" })
-	app.registerUi({ ["menu"] = "Color 4", ["callback"] = "switchColor4", ["accelerator"] = "KP_4" })
-	app.registerUi({ ["menu"] = "Color 5", ["callback"] = "switchColor5", ["accelerator"] = "KP_5" })
-	app.registerUi({ ["menu"] = "Color 6", ["callback"] = "switchColor6", ["accelerator"] = "KP_6" })
-	app.registerUi({ ["menu"] = "Color 7", ["callback"] = "switchColor7", ["accelerator"] = "KP_7" })
-	app.registerUi({ ["menu"] = "Color 8", ["callback"] = "switchColor8", ["accelerator"] = "KP_8" })
-	app.registerUi({ ["menu"] = "Color 9", ["callback"] = "switchColor9", ["accelerator"] = "KP_9" })
+  for i, col in ipairs(COLORS) do
+    app.registerUi({ ["menu"] = "Switch to " .. col.name, ["callback"] = "switchColor", ["accelerator"] = col.accel, ["mode"] = i })
+  end
 end
 
-function switchColor0() app.changeToolColor({ ["color"] = COLORS[1] }) end
-function switchColor1() app.changeToolColor({ ["color"] = COLORS[2] }) end
-function switchColor2() app.changeToolColor({ ["color"] = COLORS[3] }) end
-function switchColor3() app.changeToolColor({ ["color"] = COLORS[4] }) end
-function switchColor4() app.changeToolColor({ ["color"] = COLORS[5] }) end
-function switchColor5() app.changeToolColor({ ["color"] = COLORS[6] }) end
-function switchColor6() app.changeToolColor({ ["color"] = COLORS[7] }) end
-function switchColor7() app.changeToolColor({ ["color"] = COLORS[8] }) end
-function switchColor8() app.changeToolColor({ ["color"] = COLORS[9] }) end
-function switchColor9() app.changeToolColor({ ["color"] = COLORS[10] }) end
+ -- Callback to change the tool color
+function switchColor(mode)
+  app.changeToolColor({ ["color"] = COLORS[mode].hex })
+end
